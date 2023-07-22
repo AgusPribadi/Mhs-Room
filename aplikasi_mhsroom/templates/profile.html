@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Profile</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+
+        <div class="container mt-5">
+            <h1>Halaman Profil</h1>
+            <p><strong>Username:</strong> {{ profile.user.username }}</p>
+            <p><strong>Email:</strong> {{ profile.user.email }}</p>
+
+            {% if profile.photo %}
+            <img src="{{ profile.photo.url }}" alt="{{ profile.user.username }}'s Profile Photo" style="max-width: 200px; max-height: 200px" />
+            {% else %}
+            <p>No photo uploaded yet.</p>
+            {% endif %}
+
+            <!-- Add more profile information here -->
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary">Ubah Profil</a>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

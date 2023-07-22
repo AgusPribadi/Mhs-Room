@@ -4,7 +4,6 @@ import re
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # Tambahkan field foto profil
     photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
     friends = models.ManyToManyField('self', blank=True)
 
@@ -36,8 +35,3 @@ class Friend(models.Model):
 
     def __str__(self):
         return f"Friendship created at {self.created_at}"
-    
-
-class Tag(models.Model):
-    tagged_user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.ForeignKey('Comment', on_delete=models.CASCADE)

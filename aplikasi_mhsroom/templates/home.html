@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'aplikasi_mhsroom/css/home.css' %}" />
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+
+        <div class="container mt-5">
+            <h1>Selamat Datang, {{ user.username }}!</h1>
+            <hr />
+            <h2>Buat Post Baru:</h2>
+            <form method="post" action="{% url 'create_post' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="content" class="form-control" rows="3" placeholder="Apa yang kamu pikirkan?" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="id_image">Unggah Gambar:</label>
+                    <input type="file" name="image" id="id_image" accept="image/*" />
+                </div>
+                <button type="submit" class="btn btn-primary">Posting</button>
+            </form>
+            <hr />
+            <h2>Semua Post:</h2>
+            {% for post in all_posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">{{ post.content }}</p>
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" class="img-fluid post-image" alt="Post Image" />
+                    {% endif %}
+                    <small class="text-muted">
+                        Diposting oleh {% if post.user.profile.photo %}
+                        <img src="{{ post.user.profile.photo.url }}" alt="Profile Photo" class="profile-photo" />
+                        {% else %}
+                        <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile Photo" class="profile-photo" />
+                        {% endif %} {{ post.user.username }} pada {{ post.created_at }}
+                    </small>
+                    <br />
+                    <a href="{% url 'detail_post' post.id %}">Lihat Post</a>
+                    <hr />
+                    <h5 class="card-title">Comments:</h5>
+                    {% for comment in comments %} {% if comment.post == post %}
+                    <div class="media">
+                        {% if comment.user.profile.photo %}
+                        <img src="{{ comment.user.profile.photo.url }}" alt="Profile Photo" class="profile-photo mr-3" />
+                        {% endif %}
+                        <div class="media-body">
+                            <p class="card-text">{{ comment.content }}</p>
+                            <small class="text-muted">Commented by {{ comment.user.username }} at {{ comment.created_at }}</small>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endif %} {% endfor %}
+                    <form method="post" action="{% url 'create_comment' post.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <textarea id="id_content" name="content" class="form-control" rows="2" placeholder="Tulis Komentar..." required></textarea>
+                        </div>
+                        <input type="hidden" id="id_tagged_users" name="tagged_users" />
+                        <button type="submit" class="btn btn-primary">Komentar</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="{% static 'aplikasi_chatroom/js/home.js' %}"></script>
+    </body>
+</html>

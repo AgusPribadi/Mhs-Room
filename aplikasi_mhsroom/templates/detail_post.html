@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Detail Post</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="{% static 'aplikasi_mhsroom/css/detail_post.css' %}" />
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+        <div class="container mt-5">
+            <h1>Detail Post</h1>
+            <hr />
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">{{ post.content }}</p>
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" class="img-fluid post-image" alt="Post Image" />
+                    {% endif %}
+                    <small class="text-muted">Diposting oleh {{ post.user.username }} pada {{ post.created_at }}</small>
+                </div>
+            </div>
+            <hr />
+            <h2>Komentar:</h2>
+            {% for comment in comments %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">{{ comment.content }}</p>
+                    <small class="text-muted">Dikomentari oleh {{ comment.user.username }} pada {{ comment.created_at }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

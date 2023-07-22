@@ -102,9 +102,7 @@ def detail_post(request, post_id):
 
 @login_required
 def create_comment(request, post_id):
-    post = get_object_or_404(Post, 
-   
-id=post_id)
+    post = get_object_or_404(Post, id=post_id)
 
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -113,11 +111,6 @@ id=post_id)
             comment.post = post
             comment.user = request.user
             comment.save()
-
-            # Save tagged users
-            tagged_users = request.POST.get("tagged_users")
-            if tagged_users:
-                comment.tagged_users.set(tagged_users.split(","))
 
             return redirect("home")
 
