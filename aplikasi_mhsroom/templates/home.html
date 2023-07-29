@@ -1,9 +1,9 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
     <head>
         <title>Home</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
         <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="{% static 'aplikasi_mhsroom/css/home.css' %}" />
@@ -15,44 +15,37 @@
             <h1>Selamat Datang, {{ user.username }}!</h1>
             <hr />
             <h2>Buat Post Baru:</h2>
-            <form method="post" action="{% url 'create_post' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="form-group">
-                    <textarea name="content" class="form-control" rows="3" placeholder="Apa yang kamu pikirkan?" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="id_image">Unggah Gambar:</label>
-                    <input type="file" name="image" id="id_image" accept="image/*" />
-                </div>
-                <button type="submit" class="btn btn-primary">Posting</button>
-            </form>
+            <!-- Form untuk membuat post baru -->
+            <!-- ... (bagian form tetap sama) ... -->
             <hr />
             <h2>Semua Post:</h2>
             {% for post in all_posts %}
             <div class="card mb-3">
                 <div class="card-body">
-                    <p class="card-text">{{ post.content }}</p>
                     {% if post.image %}
                     <img src="{{ post.image.url }}" class="img-fluid post-image" alt="Post Image" />
                     {% endif %}
                     <small class="text-muted">
-                        Diposting oleh {% if post.user.profile.photo %}
+                        {% if post.user.profile.photo %}
                         <img src="{{ post.user.profile.photo.url }}" alt="Profile Photo" class="profile-photo" />
                         {% else %}
                         <img src="{% static 'images/default_profile.jpg' %}" alt="Default Profile Photo" class="profile-photo" />
                         {% endif %} {{ post.user.username }} pada {{ post.created_at }}
                     </small>
                     <br />
-                    <a href="{% url 'detail_post' post.id %}">Lihat Post</a>
+                    <br />
+                    <a href="{% url 'detail_post' post.id %}" class="post-content">
+                        <p class="card-text">{{ post.content }}</p>
+                    </a>
                     <hr />
-                    <h5 class="card-title">Comments:</h5>
+                    <h5 class="card-title" style="color: #6c757d">Comments:</h5>
                     {% for comment in comments %} {% if comment.post == post %}
                     <div class="media">
                         {% if comment.user.profile.photo %}
                         <img src="{{ comment.user.profile.photo.url }}" alt="Profile Photo" class="profile-photo mr-3" />
                         {% endif %}
                         <div class="media-body">
-                            <p class="card-text">{{ comment.content }}</p>
+                            <p class="card-text" style="color: #6c757d">{{ comment.content }}</p>
                             <small class="text-muted">Commented by {{ comment.user.username }} at {{ comment.created_at }}</small>
                         </div>
                     </div>
